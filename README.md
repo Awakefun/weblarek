@@ -98,3 +98,154 @@ Presenter - презентер содержит основную логику п
 `emit<T extends object>(event: string, data?: T): void` - инициализация события. При вызове события в метод передается название события и объект с данными, который будет использован как аргумент для вызова обработчика.  
 `trigger<T extends object>(event: string, context?: Partial<T>): (data: T) => void` - возвращает функцию, при вызове которой инициализируется требуемое в параметрах событие с передачей в него данных из второго параметра.
 
+## Данные
+
+### `TPayment`
+Тип способа оплаты:
+
+```ts
+type TPayment = 'card' | 'cash';
+```
+
+### `IProduct`
+Описывает товар магазина:
+
+```ts
+interface IProduct {
+    id: string;
+    description: string;
+    image: string;
+    title: string;
+    category: string;
+    price: number | null;
+}
+```
+
+### `IBuyer`
+Описывает данные покупателя:
+
+```ts
+interface IBuyer {
+    payment: TPayment;
+    email: string;
+    phone: string;
+    address: string;
+}
+```
+
+### `IBuyerData`
+Используется для хранения текущих данных покупателя.  
+Поле `payment` может быть `null`, если способ оплаты ещё не выбран.
+
+```ts
+interface IBuyerData {
+    payment: TPayment | null;
+    email: string;
+    phone: string;
+    address: string;
+}
+```
+
+### `IBuyerErrors`
+Описывает ошибки валидации данных покупателя.
+
+```ts
+interface IBuyerErrors {
+    payment?: string;
+    email?: string;
+    phone?: string;
+    address?: string;
+}
+```
+
+### `IProductsResponse`
+Описывает ответ сервера со списком товаров.
+
+```ts
+interface IProductsResponse {
+    total: number;
+    items: IProduct[];
+}
+```
+
+### `IOrder`
+Описывает данные заказа, отправляемые на сервер.
+
+```ts
+interface IOrder extends IBuyer {
+    total: number;
+    items: string[];
+}
+```
+
+### `IOrderResponse`
+Описывает ответ сервера после успешного оформления заказа.
+
+```ts
+interface IOrderResponse {
+    id: string;
+    total: number;
+}
+```
+
+## Модели данных
+
+### `Products`
+Хранит каталог товаров и товар, выбранный для подробного просмотра.
+
+Поля:
+- `items: IProduct[]` — каталог товаров;
+- `selectedItem: IProduct | null` — выбранный товар.
+
+Методы:
+- `setItems(items: IProduct[]): void` — сохранить товары;
+- `getItems(): IProduct[]` — получить каталог;
+- `getItem(id: string): IProduct | undefined` — найти товар по `id`;
+- `setSelectedItem(item: IProduct): void` — сохранить выбранный товар;
+- `getSelectedItem(): IProduct | null` — получить выбранный товар.
+
+### `Basket`
+Хранит товары, добавленные в корзину.
+
+Поля:
+- `items: IProduct[]` — товары в корзине.
+
+Методы:
+- `getItems(): IProduct[]` — получить товары корзины;
+- `addItem(item: IProduct): void` — добавить товар;
+- `removeItem(item: IProduct): void` — удалить товар;
+- `clear(): void` — очистить корзину;
+- `getTotal(): number` — получить общую стоимость;
+- `getCount(): number` — получить количество товаров;
+- `hasItem(id: string): boolean` — проверить наличие товара.
+
+### `Buyer`
+Хранит данные покупателя и отвечает за их валидацию.
+
+Поля:
+- `payment: TPayment | null` — способ оплаты;
+- `email: string` — email;
+- `phone: string` — телефон;
+- `address: string` — адрес.
+
+Методы:
+- `setPayment(payment: TPayment): void`;
+- `setEmail(email: string): void`;
+- `setPhone(phone: string): void`;
+- `setAddress(address: string): void`;
+- `getData(): IBuyerData` — получить все данные;
+- `clear(): void` — очистить данные;
+- `validate(): IBuyerErrors` — проверить заполненность полей.
+
+## Слой коммуникации
+
+### `WebLarekApi`
+
+Класс отвечает за работу с API приложения.
+
+Конструктор:
+- `constructor(api: IApi)` — принимает объект для выполнения запросов.
+
+Методы:
+- `getProducts(): Promise<IProductsResponse>` — получает список товаров;
+- `postOrder(order: IOrder): Promise<IOrderResponse>` — отправляет заказ на сервер.
