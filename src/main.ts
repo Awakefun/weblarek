@@ -8,7 +8,7 @@ import { Basket } from './components/Models/Basket';
 
 import { Buyer } from './components/Models/Buyer';
 
-import { Api } from './components/base/api';
+import { Api } from './components/base/Api';
 
 import { WebLarekApi } from './components/WebLarekApi';
 
