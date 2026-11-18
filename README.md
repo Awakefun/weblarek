@@ -248,6 +248,9 @@ interface IOrderResponse {
 Конструктор:
 - `constructor(api: IApi)` — принимает объект для выполнения запросов.
 
+Поля:
+- `api: IApi` — объект для выполнения запросов к серверу.
+
 Методы:
 - `getProducts(): Promise<IProductsResponse>` — получает список товаров;
 - `postOrder(order: IOrder): Promise<IOrderResponse>` — отправляет заказ на сервер.
