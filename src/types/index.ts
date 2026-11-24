@@ -51,3 +51,35 @@ export interface IOrderResponse {
     id: string;
     total: number;
 }
+
+export interface IHeader {
+    counter: number;
+}
+
+export interface IGallery {
+    items: HTMLElement[];
+}
+
+export interface IModal {
+    content: HTMLElement;
+}
+
+export interface ICard {
+    title: string;
+    price: number | null;
+}
+
+export interface ICardCatalog extends ICard {
+    category: string;
+    image: string;
+}
+
+export interface ICardPreview extends ICardCatalog {
+    description: string;
+    buttonText: string;
+    disabled: boolean;
+}
+
+export interface ICardBasket extends ICard {
+    index: number;
+}

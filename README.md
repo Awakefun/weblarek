@@ -292,3 +292,186 @@ interface IOrderResponse {
 Методы:
 - `getProducts(): Promise<IProductsResponse>` — получает список товаров;
 - `postOrder(order: IOrder): Promise<IOrderResponse>` — отправляет заказ на сервер.
+
+## Слой представления
+
+### `IHeader`
+
+Описывает данные для отображения шапки сайта.
+
+```ts
+interface IHeader {
+    counter: number;
+}
+```
+
+Поля:
+- `counter` — количество товаров в корзине.
+
+### `Header`
+
+Конструктор:
+- `constructor(container: HTMLElement)` — принимает корневой элемент шапки сайта.
+
+Поля:
+- `basketButton: HTMLButtonElement` — кнопка открытия корзины;
+- `counterElement: HTMLElement` — элемент счётчика товаров.
+
+Методы:
+- `set counter(value: number)` — обновляет счётчик товаров в корзине.
+
+### `IGallery`
+
+Описывает данные для отображения каталога.
+
+```ts
+interface IGallery {
+    items: HTMLElement[];
+}
+```
+
+Поля:
+- `items` — массив HTML-элементов карточек товаров.
+
+### `Gallery`
+
+Конструктор:
+- `constructor(container: HTMLElement)` — принимает контейнер каталога.
+
+Поля:
+- `container: HTMLElement` — контейнер каталога, наследуется от `Component`.
+
+Методы:
+- `set items(value: HTMLElement[])` — заменяет содержимое каталога переданными карточками.
+
+### `IModal`
+
+Описывает содержимое модального окна.
+
+```ts
+interface IModal {
+    content: HTMLElement;
+}
+```
+
+Поля:
+- `content` — HTML-элемент содержимого модального окна.
+
+### `Modal`
+
+Отвечает за открытие, закрытие и отображение содержимого модального окна.
+
+Конструктор:
+- `constructor(container: HTMLElement)` — принимает корневой элемент модального окна.
+
+Поля:
+- `closeButton: HTMLButtonElement` — кнопка закрытия;
+- `contentElement: HTMLElement` — контейнер содержимого.
+
+Методы:
+- `set content(value: HTMLElement)` — заменяет содержимое модального окна;
+- `open(): void` — открывает модальное окно;
+- `close(): void` — закрывает модальное окно и очищает содержимое.
+
+### `ICard`
+
+Описывает общие данные карточек товаров.
+
+```ts
+interface ICard {
+    title: string;
+    price: number | null;
+}
+```
+
+Поля:
+- `title` — название товара;
+- `price` — стоимость товара, `null` — товар недоступен для покупки.
+
+### `Card`
+
+Является общим родителем для карточек товаров. Отвечает за отображение названия и стоимости товара.
+
+Конструктор:
+- `constructor(container: HTMLElement)` — принимает корневой элемент карточки.
+
+Поля:
+- `titleElement: HTMLElement` — элемент названия товара;
+- `priceElement: HTMLElement` — элемент стоимости товара.
+- `categoryElement: HTMLElement | null` — элемент категории товара;
+- `imageElement: HTMLImageElement | null` — элемент изображения товара.
+
+Методы:
+- `set title(value: string)` — отображает название товара;
+- `set price(value: number | null)` — отображает стоимость товара.
+- `set category(value: string)` — отображает категорию товара и устанавливает соответствующий CSS-класс;
+- `set image(value: string)` — устанавливает изображение товара.
+
+### `CardCatalog`
+
+Отвечает за отображение карточки товара в каталоге.
+
+Конструктор:
+- `constructor(container: HTMLElement)` — принимает корневой элемент карточки.
+
+### `ICardPreview`
+
+Описывает данные карточки подробного просмотра товара.
+
+```ts
+interface ICardPreview extends ICardCatalog {
+    description: string;
+    buttonText: string;
+    disabled: boolean;
+}
+```
+
+Наследует поля интерфейса `ICardCatalog`.
+
+Дополнительные поля:
+- `description` — описание товара;
+- `buttonText` — текст кнопки;
+- `disabled` — состояние блокировки кнопки.
+
+### `CardPreview`
+
+Отвечает за подробное отображение товара.
+
+Конструктор:
+- `constructor(container: HTMLElement)` — принимает корневой элемент карточки.
+
+Поля:
+- `descriptionElement: HTMLElement` — элемент описания товара;
+- `buttonElement: HTMLButtonElement` — кнопка покупки или удаления товара.
+
+Методы:
+- `set description(value: string)` — отображает описание товара;
+- `set buttonText(value: string)` — изменяет текст кнопки;
+- `set disabled(value: boolean)` — блокирует или разблокирует кнопку.
+
+### `ICardBasket`
+
+Описывает данные карточки товара в корзине.
+
+```ts
+interface ICardBasket extends ICard {
+    index: number;
+}
+```
+
+Поля:
+- `index` — порядковый номер товара в корзине.
+
+### `CardBasket`
+
+Отвечает за отображение отдельного товара в корзине.
+
+Конструктор:
+- `constructor(container: HTMLElement)` — принимает корневой элемент карточки.
+
+Поля:
+- `indexElement: HTMLElement` — элемент порядкового номера товара;
+- `deleteButton: HTMLButtonElement` — кнопка удаления товара из корзины.
+
+Методы:
+- `set index(value: number)` — отображает порядковый номер товара.
