@@ -83,3 +83,28 @@ export interface ICardPreview extends ICardCatalog {
 export interface ICardBasket extends ICard {
     index: number;
 }
+
+export interface IBasketView {
+    items: HTMLElement[];
+    total: number;
+    disabled: boolean;
+}
+
+export interface IForm {
+    valid: boolean;
+    errors: string;
+}
+
+export interface IOrderForm extends IForm {
+    payment: TPayment | null;
+    address: string;
+}
+
+export interface IContactsForm extends IForm {
+    email: string;
+    phone: string;
+}
+
+export interface ISuccess {
+    total: number;
+}
