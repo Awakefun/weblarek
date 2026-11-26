@@ -20,14 +20,7 @@ export class BasketView extends Component<IBasketView> {
     }
 
     set items(value: HTMLElement[]) {
-        if (value.length === 0) {
-            const message = document.createElement('li');
-            message.textContent = 'Корзина пуста';
-
-            this.listElement.replaceChildren(message);
-        } else {
-            this.listElement.replaceChildren(...value);
-        }
+        this.listElement.replaceChildren(...value);
     }
 
     set total(value: number) {

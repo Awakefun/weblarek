@@ -7,7 +7,7 @@ import { Buyer } from './components/Models/Buyer';
 import { Api } from './components/base/Api';
 import { EventEmitter } from './components/base/Events';
 import { WebLarekApi } from './components/WebLarekApi';
-import { API_URL } from './utils/constants';
+import { API_URL, CDN_URL} from './utils/constants';
 
 import { Header } from './components/Views/Header';
 import { Gallery } from './components/Views/Gallery';
@@ -72,8 +72,7 @@ const gallery = new Gallery(
 );
 
 const modal = new Modal(
-    document.querySelector<HTMLElement>('#modal-container')!,
-    events
+    document.querySelector<HTMLElement>('#modal-container')!
 );
 
 const cardPreviewElement = cardPreviewTemplate.content
@@ -307,10 +306,6 @@ events.on('order:submit', () => {
     const buyer = buyerModel.getData();
     const errors = buyerModel.validate();
 
-    if (errors.payment || errors.address) {
-        return;
-    }
-
     modal.render({
         content: contactsForm.render({
             email: buyer.email,
@@ -328,18 +323,9 @@ events.on('order:submit', () => {
 
 events.on('contacts:submit', () => {
     const buyer = buyerModel.getData();
-    const errors = buyerModel.validate();
-
-    if (
-        Object.keys(errors).length > 0 ||
-        buyer.payment === null ||
-        basketModel.getCount() === 0
-    ) {
-        return;
-    }
 
     const order: IOrder = {
-        payment: buyer.payment,
+        payment: buyer.payment as TPayment,
         email: buyer.email,
         phone: buyer.phone,
         address: buyer.address,
@@ -367,6 +353,10 @@ events.on('contacts:submit', () => {
 
 webLarekApi.getProducts()
     .then((data) => {
+        data.items.forEach((product) => {
+            product.image = CDN_URL + product.image;
+        });
+
         productsModel.setItems(data.items);
     })
     .catch((error) => {
